@@ -2,6 +2,8 @@ BacklogBlooming::Application.routes.draw do
   get "info_pages/home"
 
   get "info_pages/help"
+  
+  get "info_pages/about"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

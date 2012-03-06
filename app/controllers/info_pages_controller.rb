@@ -4,4 +4,7 @@ class InfoPagesController < ApplicationController
 
   def help
   end
+  
+  def about
+  end
 end
