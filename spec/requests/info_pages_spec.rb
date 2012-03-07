@@ -12,7 +12,7 @@ describe "info_pages" do
       
     it "should have the right h1" do
       visit '/info_pages/home'
-      page.should have_selector('h1', :text => 'Home')
+      page.should have_selector('h1', :text => 'Backlog Blooming')
     end
   end
   
