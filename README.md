@@ -1,6 +1,6 @@
 Backlog Blooming
 	- Sprout your user stories
-	- Nourish your sprints
+	- Nurture your sprints
 	- Hatch your planning
 	- Grow your confidence
 	- Harvest success
