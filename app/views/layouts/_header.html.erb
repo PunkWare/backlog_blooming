@@ -1,5 +1,6 @@
 <header>
-	<%= image_tag("punkware.jpg", alt: "Backlog Blooming", class: "round") %>
+	<% company_logo = image_tag("punkware.jpg", alt: "Backlog Blooming", class: "round") %>
+	<%= link_to company_logo, root_path %>
 	<nav class="round">
 		<ul>
 			<li><%= link_to "Home", root_path %></li>
