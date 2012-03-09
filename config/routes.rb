@@ -1,9 +1,12 @@
 BacklogBlooming::Application.routes.draw do
 
-  match '/help',    to: 'info_pages#help'
-  match '/about',   to: 'info_pages#about'
+  get "users/new"
 
   root              to: 'info_pages#home'
+
+  match '/help',    to: 'info_pages#help'
+  match '/about',   to: 'info_pages#about'
+  match '/signup',  to: 'users#new'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
