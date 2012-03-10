@@ -7,6 +7,7 @@ describe User do
   
   it { should respond_to(:name) }
   it { should respond_to(:email) }
+  it { should respond_to(:password_digest) }
   
   # check that user is valid at this point before checking the following tests
   it { should be_valid }
