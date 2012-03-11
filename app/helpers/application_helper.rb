@@ -12,6 +12,6 @@ module ApplicationHelper
   end
   
   def logo
-    image_tag("punkware.jpg", alt: "Backlog Blooming", class: "round")
+    image_tag("home_stripe.jpg", alt: "Backlog Blooming", class: "round")
   end
 end

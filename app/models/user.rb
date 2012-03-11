@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  attr_accessible :name, :email
+  attr_accessible :name, :email, :password, :password_confirmation
+  has_secure_password
   
   validates :name, presence: true, length: { maximum: 50 }
   
@@ -13,4 +14,8 @@ class User < ActiveRecord::Base
   # (\.[\w\-]+)+  : A dot, then any word character (letter, number, underscore) and hyphen at least one time (to ensure there's something after the dot). The whole at leastone time
   
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEXP}, uniqueness: { case_sensitive: false }
+  
+  validates :password, length: { minimum: 6 }
+  validates :password_confirmation, presence: true
+  
 end
