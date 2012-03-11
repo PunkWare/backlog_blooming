@@ -1,9 +1,13 @@
-<header>
-	<%= link_to logo, root_path %>
-	<nav class="round">
-		<ul>
-			<li><%= link_to "Home", root_path %></li>
-			<li><%= link_to "Sign in", '#' %></li>
-		</ul>
-	</nav>
+<header class= "navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<%= link_to "Backlog Blooming", root_path, id: "logo" %>
+			<nav>
+				<ul class="nav pull-right">
+					<li><%= link_to "Home", root_path %></li>
+					<li><%= link_to "Sign in", '#' %></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 </header>
