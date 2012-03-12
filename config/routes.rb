@@ -1,6 +1,6 @@
 BacklogBlooming::Application.routes.draw do
 
-  get "users/new"
+  resources :users
 
   root              to: 'info_pages#home'
 
