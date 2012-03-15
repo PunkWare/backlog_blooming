@@ -17,15 +17,38 @@ describe "user_pages" do
   end
   
   describe "When providing sign up fields" do
+    let(:create_account_button) {'Create my account'}
+    
     before { visit signup_path }
 
-    describe "with invalid information" do
+    describe "with invalid information," do
       it "should not create a user" do
-        expect { click_button "Create my account" }.not_to change(User, :count)
+        expect { click_button create_account_button }.not_to change(User, :count)
+      end
+      
+      describe "should display error messages" do
+        before { click_button create_account_button }
+        
+        it { should have_content('Password can\'t be blank') }
+        it { should have_content('Name can\'t be blank') }
+        it { should have_content('Email can\'t be blank') }
+        it { should have_content('Email is invalid') }
+        it { should have_content('Password is too short') }
+        it { should have_content('Password confirmation can\'t be blank') }   
+      end
+      
+      describe "should display password matching error message" do
+        before do
+          fill_in "Password",     with: "fakefake"
+          fill_in "Confirmation", with: "fakefak"
+          click_button create_account_button
+        end
+        
+        it { should have_content('Password doesn\'t match confirmation') }   
       end
     end
 
-    describe "with valid information" do
+    describe " with valid information, " do
       before do
         fill_in "Name",         with: "fake"
         fill_in "Email",        with: "fake@fake.fake"
@@ -35,8 +58,16 @@ describe "user_pages" do
 
       it "should create a user" do
         expect do
-          click_button "Create my account"
+          click_button create_account_button
         end.to change(User, :count).by(1)
+      end
+      
+      describe "after saving the user" do
+        before { click_button create_account_button }
+        let(:user) { User.find_by_email('fake@fake.fake') }
+
+        it { should have_selector('title', text: user.name) }
+        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
       end
     end
   end
