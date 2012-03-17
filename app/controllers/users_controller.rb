@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       flash[ :success ] = "Welcome and let's bloom !"
-      redirect_to @user
+      redirect_to user_path(@user)
     else
       render 'new'
     end

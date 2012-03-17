@@ -72,7 +72,7 @@ describe "user_pages" do
     end
   end
   
-  describe "When testing title and h1 on user page, " do
+  describe "When testing title and h1 on profile page, " do
     # It's possible to use ActiveRecord to create a user in the test database...
     #let(:user) { User.create(name: "Fake", email: "fake@fake.fake", password: "fakefake", password_confirmation: "fakefake") }
 

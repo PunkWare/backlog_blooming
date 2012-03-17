@@ -12,6 +12,9 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
   
+  # Session management (with cookie) related
+  it { should respond_to(:remember_token) }
+  
   # check that user is valid at this point before checking the following tests
   it { should be_valid }
     
@@ -94,4 +97,8 @@ describe User do
     end
   end
   
+  describe "Remember cookie token" do
+    before { @user.save }
+    its(:remember_token) {should_not be_blank}
+  end
 end

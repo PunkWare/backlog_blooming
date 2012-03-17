@@ -1,12 +1,18 @@
 BacklogBlooming::Application.routes.draw do
 
   resources :users
+  
+  resources :sessions, only: [ :new, :create, :destroy ]
 
   root              to: 'info_pages#home'
 
   match '/help',    to: 'info_pages#help'
   match '/about',   to: 'info_pages#about'
+  
   match '/signup',  to: 'users#new'
+  
+  match '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
