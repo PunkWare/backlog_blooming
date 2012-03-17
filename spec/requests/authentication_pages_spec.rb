@@ -24,7 +24,7 @@ describe "Signin, and signout pages" do
     describe "with invalid information" do
       before { click_button sign_in_button }
 
-      it { should have_selector('div.alert.alert-error', text: 'Invalid email/password combination') }
+      it { should have_flash_message('Invalid email/password combination','error') }
       
       # making sure that the flash message doesn't stay when going to another page
       describe "after visiting another page" do

@@ -29,12 +29,12 @@ describe "user_pages" do
       describe "should display error messages" do
         before { click_button create_account_button }
         
-        it { should have_content('Password can\'t be blank') }
-        it { should have_content('Name can\'t be blank') }
-        it { should have_content('Email can\'t be blank') }
-        it { should have_content('Email is invalid') }
-        it { should have_content('Password is too short') }
-        it { should have_content('Password confirmation can\'t be blank') }   
+        it { should have_flash_message('Password can\'t be blank','error') }
+        it { should have_flash_message('Name can\'t be blank','error') }
+        it { should have_flash_message('Email can\'t be blank','error') }
+        it { should have_flash_message('Email is invalid','error') }
+        it { should have_flash_message('Password is too short','error') }
+        it { should have_flash_message('Password confirmation can\'t be blank','error') }   
       end
       
       describe "should display password matching error message" do
@@ -67,7 +67,7 @@ describe "user_pages" do
         let(:user) { User.find_by_email('fake@fake.fake') }
 
         it { should have_selector('title', text: user.name) }
-        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        it { should have_flash_message('Welcome','success') }
       end
     end
   end
