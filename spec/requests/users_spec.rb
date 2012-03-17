@@ -4,8 +4,8 @@ describe "user_pages" do
   subject { page }
   
   shared_examples_for "all user pages" do
-    it { should have_selector('title', text: full_title(page_title)) }   
-    it { should have_selector('h1',    text: heading) }
+    it { should have_title(full_title(page_title)) }   
+    it { should have_heading(heading) }
   end
   
   describe "When testing title and h1 on sign up page, " do
@@ -44,7 +44,7 @@ describe "user_pages" do
           click_button create_account_button
         end
         
-        it { should have_content('Password doesn\'t match confirmation') }   
+        it { should have_flash_message('Password doesn\'t match confirmation','error') }   
       end
     end
 
@@ -66,7 +66,7 @@ describe "user_pages" do
         before { click_button create_account_button }
         let(:user) { User.find_by_email('fake@fake.fake') }
 
-        it { should have_selector('title', text: user.name) }
+        it { should have_title(user.name) }
         it { should have_flash_message('Welcome','success') }
       end
     end

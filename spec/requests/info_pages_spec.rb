@@ -4,8 +4,8 @@ describe "info_pages" do
   subject { page }
   
   shared_examples_for "all static pages" do
-    it { should have_selector('title', text: full_title(page_title)) }   
-    it { should have_selector('h1',    text: heading) }
+    it { should have_title(full_title(page_title)) }   
+    it { should have_heading(heading) }
   end
   
   let(:home_page_title) {"Home"}
@@ -41,13 +41,17 @@ describe "info_pages" do
     visit root_path
     
     click_link "About"
-    page.should have_selector 'title', text: full_title(about_page_title)
+    page.should have_title(full_title(about_page_title))
+    
     click_link "Help"
-    page.should have_selector 'title', text: full_title(help_page_title)
+    page.should have_title(full_title(help_page_title))
+    
     click_link "Home"
-    page.should have_selector 'title', text: full_title(home_page_title)
+    page.should have_title(full_title(home_page_title))
+    
     click_link "Sign up now!"
-    page.should have_selector 'title', text: full_title('Sign up')
+    page.should have_title(full_title('Sign up'))
+    
   end
   
 end
