@@ -51,6 +51,96 @@ describe "Signin, and signout pages" do
     end
   end
 
+  describe "Authorization" do
+    describe "for non-signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      describe "when trying to view a profile page" do
+        before { visit user_path(user) }
+          
+        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
+        it { should have_selector('title', text: 'Sign in') }
+      end
+
+      describe "when trying a show action" do
+        before { get user_path(user) }
+          
+        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
+        specify { response.should redirect_to(signin_path) }
+      end
+
+      describe "when trying to edit a profile page" do
+        before { visit edit_user_path(user) }
+          
+        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
+        it { should have_selector('title', text: 'Sign in') }
+      end
+
+      describe "when trying an update action" do
+        before { put user_path(user) }
+          
+        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
+        specify { response.should redirect_to(signin_path) }
+      end
+    end
+    
+    describe "for signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+      before { sign_in user }
+
+      describe "when trying to edit the profile of another user" do
+        before { visit edit_user_path(wrong_user) }
+        it { should have_title('') }
+      end
+
+      describe "when trying to view the profile of another user" do
+        before { visit user_path(wrong_user) }
+        it { should have_title('') }
+      end
+
+      describe "when submitting a PUT request to the Users#update action" do
+        before { put user_path(wrong_user) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+    end
+    
+    describe "for non-signed-in users" do
+      let(:sign_in_button) {'Sign in'}
+      let(:user) { FactoryGirl.create(:user) }
+
+      describe "when attempting to view a profile" do
+        before do
+          visit user_path(user)
+          fill_in "Email",    with: user.email
+          fill_in "Password", with: user.password
+          click_button sign_in_button
+        end
+
+        describe "after signing in" do
+          it "should render the view profile page" do
+            page.should have_title(user.name)
+          end
+        end
+      end
+
+      describe "when attempting to edit a profile" do
+        before do
+          visit edit_user_path(user)
+          fill_in "Email",    with: user.email
+          fill_in "Password", with: user.password
+          click_button sign_in_button
+        end
+
+        describe "after signing in" do
+          it "should render the edit profile page" do
+            page.should have_title('Edit user')
+          end
+        end
+      end
+    end
+  end
   
 end
 

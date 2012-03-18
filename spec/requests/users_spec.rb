@@ -63,8 +63,8 @@ describe "user_pages" do
       end
       
       describe "after saving the user" do
-        before { click_button create_account_button }
         let(:user) { User.find_by_email('fake@fake.fake') }
+        before { click_button create_account_button }      
 
         it { should have_title(user.name) }
         it { should have_flash_message('Welcome','success') }
@@ -72,14 +72,18 @@ describe "user_pages" do
     end
   end
   
-  describe "When testing title and h1 on profile page, " do
+  describe "When testing title and h1 on view profile page, " do
     # It's possible to use ActiveRecord to create a user in the test database...
     #let(:user) { User.create(name: "Fake", email: "fake@fake.fake", password: "fakefake", password_confirmation: "fakefake") }
 
     # ...or to use Factory Girl to do the same thing
     let(:user) { FactoryGirl.create(:user) }
     
-    before { visit user_path(user) }
+    # must sign in user to comply with authorization restrictions
+    before do
+      sign_in user
+      visit user_path(user)
+    end
     
     let(:heading) {user.name}
     let(:page_title) {heading}
@@ -87,10 +91,15 @@ describe "user_pages" do
     it_should_behave_like "all user pages"
   end
   
-  describe "When testing title and h1 on edit user page, " do
+  describe "When testing title and h1 on edit profile page, " do
     let(:user) { FactoryGirl.create(:user) }
     
-    before { visit edit_user_path(user) }
+    # must sign in user to comply with authorization restrictions
+    before do
+      sign_in user
+      visit edit_user_path(user)
+    end
+        
     let(:heading) {'Update your profile'}
     let(:page_title) {'Edit user'}
     
@@ -102,7 +111,11 @@ describe "user_pages" do
     let(:save_profile_button) {'Save changes'}
     let(:user) { FactoryGirl.create(:user) }
     
-    before { visit edit_user_path(user) }
+    # must sign in user to comply with authorization restrictions
+    before do
+      sign_in user
+      visit edit_user_path(user)
+    end
 
     describe "with invalid information," do
       

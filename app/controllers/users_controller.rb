@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  # arranges the signed_in_user method to be called before the given actions (edit and update)
+  before_filter :signed_in_user, only: [:show, :edit, :update]
+  before_filter :correct_user,   only: [:show, :edit, :update]
   
   def create
     @user = User.new(params[:user])
@@ -29,11 +32,14 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id]) is no more required as it is called in
+    # the 'correct_user' method below
   end
   
   def update
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id]) is no more required as it is called in
+    # the 'correct_user' method below
+    
     if @user.update_attributes(params[:user])
       
       flash[:success] = "Profile updated"
@@ -50,4 +56,24 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
+  
+  private
+      def signed_in_user
+        unless signed_in?
+          # used to store location of the URI requested by the user.
+          # permit the forwarding whien the user has signed in
+          store_location
+          
+          redirect_to signin_path, notice: "Please sign in." unless signed_in?
+          # the line above is equivalent to :
+          #flash[:notice] = "Please sign in."
+          #redirect_to signin_path unless signed_in?
+        end
+        
+      end
+      
+      def correct_user
+        @user = User.find(params[:id])
+        redirect_to(root_path) unless current_user?(@user)
+      end
 end
