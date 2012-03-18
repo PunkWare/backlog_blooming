@@ -87,6 +87,74 @@ describe "user_pages" do
     it_should_behave_like "all user pages"
   end
   
+  describe "When testing title and h1 on edit user page, " do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before { visit edit_user_path(user) }
+    let(:heading) {'Update your profile'}
+    let(:page_title) {'Edit user'}
+    
+    it_should_behave_like "all user pages"
+    it { should have_link('change', href: 'http://gravatar.com/emails') }
+  end
   
+  describe "When providing edit fields" do
+    let(:save_profile_button) {'Save changes'}
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before { visit edit_user_path(user) }
+
+    describe "with invalid information," do
+      
+      describe "should display error messages" do
+        
+        # by default the two fields are already filled with user's information
+        # they are emptied so that errors messages can be checked
+        before do
+          fill_in "Name",  with: ""
+          fill_in "Email", with: ""
+          click_button save_profile_button
+        end
+        
+        it { should have_flash_message('Name can\'t be blank','error') }
+        it { should have_flash_message('Email can\'t be blank','error') }
+        it { should have_flash_message('Email is invalid','error') }
+        it { should have_flash_message('Password is too short','error') }
+        it { should have_flash_message('Password confirmation can\'t be blank','error') }   
+      end
+      
+      describe "should display password matching error message" do
+        before do
+          fill_in "Password",     with: "fakefake"
+          fill_in "Confirmation", with: "fakefak"
+          click_button save_profile_button
+        end
+        
+        it { should have_flash_message('Password doesn\'t match confirmation','error') }   
+      end
+    end
+
+    describe " with valid information, " do
+      let(:updated_name)  { "update" }
+      let(:updated_email) { "update@update.update" }
+            
+      before do
+        fill_in "Name",         with: updated_name
+        fill_in "Email",        with: updated_email
+        fill_in "Password",     with: user.password
+        fill_in "Confirmation", with: user.password
+        click_button save_profile_button
+      end
+
+      it { should have_title(updated_name) }
+      it { should have_flash_message('Profile updated','success') }
+      it { should have_link('Sign out', href: signout_path) }
+      
+      # Check that the name and email have been indeed modified
+      specify { user.reload.name.should  == updated_name }
+      specify { user.reload.email.should == updated_email }
+      
+    end
+  end
   
 end

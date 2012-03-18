@@ -27,4 +27,27 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
   end
+  
+  def edit
+    @user = User.find(params[:id])
+  end
+  
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(params[:user])
+      
+      flash[:success] = "Profile updated"
+      
+      # the user is signed again as part of a successful profile update;
+      # this is because the remember token gets reset when the user is saved
+      # which invalidates the user’s session.
+      # This is a nice security feature, as it means that any hijacked sessions
+      # will automatically expire when the user information is changed
+      sign_in @user
+      
+      redirect_to @user
+    else
+      render 'edit'
+    end
+  end
 end
