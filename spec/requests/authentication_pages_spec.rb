@@ -39,10 +39,12 @@ describe "Signin, and signout pages" do
       before { sign_in user }
 
       it { should have_title(user.name) }
-      it { should have_link('View Profile',      href: user_path(user)) }
-      it { should have_link('Edit Profile',     href: edit_user_path(user)) }
+      
+      it { should have_link('View Profile', href: user_path(user)) }
+      it { should have_link('Edit Profile', href: edit_user_path(user)) }
       it { should have_link('Sign out',     href: signout_path) }
       it { should_not have_link('Sign in',  href: signin_path) }
+      it { should have_link('Users',        href: users_path) }
       
       describe "When clicking signout linking" do
         before { click_link "Sign out" }
@@ -58,14 +60,14 @@ describe "Signin, and signout pages" do
       describe "when trying to view a profile page" do
         before { visit user_path(user) }
           
-        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
-        it { should have_selector('title', text: 'Sign in') }
+        # it shouldn't allow to go to view profile page, and forward to sign in page instead
+        it { should have_title('Sign in') }
       end
 
       describe "when trying a show action" do
         before { get user_path(user) }
           
-        # it shouldn't allow to go to edit profile page, and forward to sign in page instead
+        # it shouldn't allow to go to view profile page, and forward to sign in page instead
         specify { response.should redirect_to(signin_path) }
       end
 
@@ -73,7 +75,7 @@ describe "Signin, and signout pages" do
         before { visit edit_user_path(user) }
           
         # it shouldn't allow to go to edit profile page, and forward to sign in page instead
-        it { should have_selector('title', text: 'Sign in') }
+        it { should have_title('Sign in') }
       end
 
       describe "when trying an update action" do
@@ -81,6 +83,13 @@ describe "Signin, and signout pages" do
           
         # it shouldn't allow to go to edit profile page, and forward to sign in page instead
         specify { response.should redirect_to(signin_path) }
+      end
+      
+      describe "when trying to view the users page" do
+        before { visit users_path }
+        
+        # it shouldn't allow to go to users index page, and forward to sign in page instead
+        it { should have_title('Sign in') }
       end
     end
     
@@ -106,36 +115,41 @@ describe "Signin, and signout pages" do
       
     end
     
-    describe "for non-signed-in users" do
-      let(:sign_in_button) {'Sign in'}
-      let(:user) { FactoryGirl.create(:user) }
+    # when a non-signed-in user try to view or edit profile, he's redirected
+    # to sign-in page. If he signed-in correctly, he should then be redirected
+    # again to the page he has originaly asked for.
+    describe "when reforwarding," do
+      describe "for non-signed-in users" do
+        let(:sign_in_button) {'Sign in'}
+        let(:user) { FactoryGirl.create(:user) }
 
-      describe "when attempting to view a profile" do
-        before do
-          visit user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button sign_in_button
-        end
+        describe "when attempting to view a profile" do
+          before do
+            visit user_path(user)
+            fill_in "Email",    with: user.email
+            fill_in "Password", with: user.password
+            click_button sign_in_button
+          end
 
-        describe "after signing in" do
-          it "should render the view profile page" do
-            page.should have_title(user.name)
+          describe "after signing in" do
+            it "should render the view profile page" do
+              page.should have_title(user.name)
+            end
           end
         end
-      end
 
-      describe "when attempting to edit a profile" do
-        before do
-          visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button sign_in_button
-        end
+        describe "when attempting to edit a profile" do
+          before do
+            visit edit_user_path(user)
+            fill_in "Email",    with: user.email
+            fill_in "Password", with: user.password
+            click_button sign_in_button
+          end
 
-        describe "after signing in" do
-          it "should render the edit profile page" do
-            page.should have_title('Edit user')
+          describe "after signing in" do
+            it "should render the edit profile page" do
+              page.should have_title('Edit user')
+            end
           end
         end
       end

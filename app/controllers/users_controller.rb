@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   # arranges the signed_in_user method to be called before the given actions (edit and update)
-  before_filter :signed_in_user, only: [:show, :edit, :update]
+  before_filter :signed_in_user, only: [:show, :edit, :update, :index]
   before_filter :correct_user,   only: [:show, :edit, :update]
   
   def create
@@ -55,6 +55,10 @@ class UsersController < ApplicationController
     else
       render 'edit'
     end
+  end
+  
+  def index
+    @users = @users = User.paginate(page: params[:page])
   end
   
   private
