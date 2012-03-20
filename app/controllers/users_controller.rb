@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   # arranges the signed_in_user method to be called before the given actions (edit and update)
-  before_filter :signed_in_user, only: [:show, :edit, :update, :index]
-  before_filter :correct_user,   only: [:show, :edit, :update]
+  before_filter :signed_in_user,  only: [:show, :edit, :update]
+  before_filter :correct_user,    only: [:show, :edit, :update]
+  before_filter :admin_user,      only: [:index, :destroy]
   
   def create
     @user = User.new(params[:user])
@@ -61,6 +62,13 @@ class UsersController < ApplicationController
     @users = @users = User.paginate(page: params[:page])
   end
   
+  def destroy
+    deleted_user = User.find(params[:id]).destroy
+    #deleted_user.destroy
+    flash[:success] = "User " + deleted_user.name + " deleted."
+    redirect_to users_path
+  end
+  
   private
       def signed_in_user
         unless signed_in?
@@ -79,5 +87,9 @@ class UsersController < ApplicationController
       def correct_user
         @user = User.find(params[:id])
         redirect_to(root_path) unless current_user?(@user)
+      end
+      
+      def admin_user
+        redirect_to(root_path) unless (signed_in? && current_user.admin?)
       end
 end

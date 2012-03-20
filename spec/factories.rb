@@ -1,8 +1,13 @@
 FactoryGirl.define do
   factory :user do
-    sequence(:name)  { |n| "Person #{n}" }
-    sequence(:email) { |n| "person_#{n}@example.com"}   
-    password "foobar"
-    password_confirmation "foobar"
+    sequence(:name)  { |n| "Fake #{n}" }
+    sequence(:email) { |n| "fake#{n}@fake.fake"}   
+    password "fakefake"
+    password_confirmation "fakefake"
+    
+    #to use FactoryGirl.create(:admin) to create an administrative user in tests
+    factory :admin do
+      admin true
+    end
   end
 end

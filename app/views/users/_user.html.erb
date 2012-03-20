@@ -1,4 +1,10 @@
 <li>
-  <%= gravatar_for user, size: 52 %>
-  <%= link_to user.name, user %>
+	<%= gravatar_for user, size: 52 %>
+
+	<%= link_to user.name, user %>
+	
+	<!-- !current_user?(user) to avoid admin deleting itself--> 
+	<% if current_user.admin? && !current_user?(user) %>
+    	| <%= link_to "delete", user, method: :delete, confirm: "This user will be deleted. Are you sure ?" %>
+  	<% end %>
 </li>

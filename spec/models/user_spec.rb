@@ -11,12 +11,19 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:admin) }
   
   # Session management (with cookie) related
   it { should respond_to(:remember_token) }
   
   # check that user is valid at this point before checking the following tests
   it { should be_valid }
+  it { should_not be_admin}
+  
+  describe "with admin attribute set to 'true'" do
+    before { @user.toggle!(:admin) }
+    it { should be_admin }
+  end
     
   describe "when name is not present" do
     before { @user.name = " " }

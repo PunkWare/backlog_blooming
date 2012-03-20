@@ -44,7 +44,7 @@ describe "Signin, and signout pages" do
       it { should have_link('Edit Profile', href: edit_user_path(user)) }
       it { should have_link('Sign out',     href: signout_path) }
       it { should_not have_link('Sign in',  href: signin_path) }
-      it { should have_link('Users',        href: users_path) }
+      it { should_not have_link('Users',        href: users_path) }
       
       describe "When clicking signout linking" do
         before { click_link "Sign out" }
@@ -88,8 +88,15 @@ describe "Signin, and signout pages" do
       describe "when trying to view the users page" do
         before { visit users_path }
         
-        # it shouldn't allow to go to users index page, and forward to sign in page instead
-        it { should have_title('Sign in') }
+        # it shouldn't allow to go to users index page, and forward to root page instead
+        it { should have_title('Home') }
+      end
+      
+      describe "when trying a get index action" do
+        before { get users_path }
+          
+        # it shouldn't allow to go to view profile page, and forward to sign in page instead
+        specify { response.should redirect_to(root_path) }
       end
     end
     
@@ -113,6 +120,19 @@ describe "Signin, and signout pages" do
         specify { response.should redirect_to(root_path) }
       end
       
+      describe "when trying to view the users page" do
+        before { visit users_path }
+        
+        # it shouldn't allow to go to users index page, and forward to root page instead
+        it { should have_title('Home') }
+      end
+      
+      describe "when trying a get index action" do
+        before { get users_path }
+          
+        # it shouldn't allow to go to view profile page, and forward to sign in page instead
+        specify { response.should redirect_to(root_path) }
+      end
     end
     
     # when a non-signed-in user try to view or edit profile, he's redirected
@@ -153,6 +173,29 @@ describe "Signin, and signout pages" do
           end
         end
       end
+    end
+    
+    describe "As non-admin user" do
+      let(:user)      { FactoryGirl.create(:user) }
+      let(:non_admin) { FactoryGirl.create(:user) }
+
+      before { sign_in non_admin }
+
+      describe "when submitting a DELETE request to the Users#destroy action" do
+        before { delete user_path(user) }
+        specify { response.should redirect_to(root_path) }        
+      end
+    end
+    
+    describe "As a admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      
+      before do
+        sign_in admin
+        visit root_path
+      end
+    
+      it { should have_link('Users', href: users_path) }
     end
   end
   
