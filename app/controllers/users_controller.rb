@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   # arranges the signed_in_user method to be called before the given actions (edit and update)
-  before_filter :signed_in_user,  only: [:show, :edit, :update]
+  before_filter :signed_in_user,  only: [:show, :edit, :update] 
+  before_filter :new_user,        only: [:new, :create]
   before_filter :correct_user,    only: [:show, :edit, :update]
   before_filter :admin_user,      only: [:index, :destroy]
   
@@ -81,7 +82,11 @@ class UsersController < ApplicationController
           #flash[:notice] = "Please sign in."
           #redirect_to signin_path unless signed_in?
         end
-        
+      end
+      
+      def new_user
+        flash[:error] = "You already have un account."
+        redirect_to(root_path) if signed_in?
       end
       
       def correct_user

@@ -44,7 +44,7 @@ describe "Signin, and signout pages" do
       it { should have_link('Edit Profile', href: edit_user_path(user)) }
       it { should have_link('Sign out',     href: signout_path) }
       it { should_not have_link('Sign in',  href: signin_path) }
-      it { should_not have_link('Users',        href: users_path) }
+      it { should_not have_link('Users',    href: users_path) }
       
       describe "When clicking signout linking" do
         before { click_link "Sign out" }
@@ -56,6 +56,17 @@ describe "Signin, and signout pages" do
   describe "Authorization" do
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+
+      describe "when viewing home page" do
+        before { visit root_path }
+        
+        it { should_not have_link('View Profile', href: user_path(user)) }
+        it { should_not have_link('Edit Profile', href: edit_user_path(user)) }
+        it { should_not have_link('Sign out',     href: signout_path) }
+        it { should have_link('Sign in',          href: signin_path) }
+        it { should_not have_link('Users',        href: users_path) }
+        
+      end
 
       describe "when trying to view a profile page" do
         before { visit user_path(user) }
@@ -133,6 +144,24 @@ describe "Signin, and signout pages" do
         # it shouldn't allow to go to view profile page, and forward to sign in page instead
         specify { response.should redirect_to(root_path) }
       end
+      
+      # user already signed_in should not be able to signup (3 following tests)
+      describe "when trying to sign-up again" do
+        before { visit signup_path }
+        
+        it { should have_title('Home') }
+      end
+      describe "when trying a new action" do
+        before { get signup_path }
+        
+        specify { response.should redirect_to(root_path) }
+      end
+      describe "when trying a create action" do
+        before { post users_path }
+        
+        specify { response.should redirect_to(root_path) }
+      end
+      
     end
     
     # when a non-signed-in user try to view or edit profile, he's redirected
