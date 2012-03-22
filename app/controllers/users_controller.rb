@@ -85,7 +85,7 @@ class UsersController < ApplicationController
       end
       
       def new_user
-        flash[:error] = "You already have un account."
+        flash[:error] = "You already have an account."
         redirect_to(root_path) if signed_in?
       end
       
