@@ -3,8 +3,9 @@
 
 	<%= link_to user.name, user %>
 	
-	<!-- !current_user?(user) to avoid admin deleting itself--> 
-	<% if current_user.admin? && !current_user?(user) %>
+	<!-- 	!current_user?(user) to avoid admin deleting itself
+			!user.admin? to avoid deleting the other admins			--> 
+	<% if current_user.admin? && !current_user?(user) && !user.admin? %>
     	| <%= link_to "delete", user, method: :delete, confirm: "This user will be deleted. Are you sure ?" %>
   	<% end %>
 </li>

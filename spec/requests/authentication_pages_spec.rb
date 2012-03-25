@@ -199,6 +199,14 @@ describe "Signin, and signout pages" do
             it "should render the edit profile page" do
               page.should have_title('Edit user')
             end
+            
+            describe "when signin again" do
+              before { sign_in(user) }
+              
+              it "should render the view profile page" do
+                page.should have_title(user.name)
+              end
+            end
           end
         end
       end

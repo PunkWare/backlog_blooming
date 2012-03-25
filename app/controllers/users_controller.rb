@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = @users = User.paginate(page: params[:page])
+    @users = User.paginate(page: params[:page])
   end
   
   def destroy
