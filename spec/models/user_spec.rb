@@ -13,6 +13,9 @@ describe User do
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin) }
   
+  #  user has n tasks 
+  it { should respond_to(:tasks) }
+  
   # Session management (with cookie) related
   it { should respond_to(:remember_token) }
   
