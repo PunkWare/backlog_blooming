@@ -3,8 +3,6 @@
 
 <%= render 'shared/error_messages' %>
 
-<!-- , :object => f.object -->
-
 <div class="row">
 	<div class="span6 offset3">
 		<%= form_for(@user) do |f| %>   
@@ -15,7 +13,6 @@
     	<% end %>
 
 		<%= gravatar_for @user %>
-		<!-- target="_blank" means to open in a new window -->
     	<a href="http://gravatar.com/emails" target="_blank">change</a>
   </div>
 </div>

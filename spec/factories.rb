@@ -5,7 +5,6 @@ FactoryGirl.define do
     password "fakefake"
     password_confirmation "fakefake"
     
-    #to use FactoryGirl.create(:admin) to create an administrative user in tests
     factory :admin do
       admin true
     end
