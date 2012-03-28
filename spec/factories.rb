@@ -9,4 +9,11 @@ FactoryGirl.define do
       admin true
     end
   end
+  
+  factory :task do
+    sequence(:code)   { |n| "T#{n}" }
+    sequence(:title)  { |n| "Task number #{n}" }
+    remaining_effort 10
+    user
+  end
 end

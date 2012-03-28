@@ -6,4 +6,6 @@ class Task < ActiveRecord::Base
   validates :title, presence: true
   validates :remaining_effort, presence: true
   validates :user_id, presence: true
+  
+  default_scope order: 'tasks.code'
 end

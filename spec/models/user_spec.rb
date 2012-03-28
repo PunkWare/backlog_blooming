@@ -111,4 +111,28 @@ describe User do
     before { @user.save }
     its(:remember_token) {should_not be_blank}
   end
+  
+  describe "task associations" do
+    before { @user.save }
+    let!(:second_task) do 
+      FactoryGirl.create(:task, user: @user, code: "T2", title: "Second Task")
+    end
+    let!(:first_task) do
+      FactoryGirl.create(:task, user: @user, code: "T1", title: "First Task")
+    end
+
+    it "should have the right tasks in the right order" do
+      @user.tasks.should == [first_task, second_task]
+    end
+    
+    it "should not destroy associated tasks when user is deleted" do
+      tasks = @user.tasks
+      @user.destroy
+      tasks.each do |task|
+        Task.find_by_id(task.id).should_not be_nil
+      end
+    end
+  end
+  
+  
 end
