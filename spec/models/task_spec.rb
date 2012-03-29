@@ -32,8 +32,18 @@ describe Task do
     it { should_not be_valid }
   end
   
+  describe "When code is blank" do
+    before { @task.code =  " " }
+    it { should_not be_valid }
+  end
+  
   describe "When title is not present" do
     before { @task.title = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "When title is blank" do
+    before { @task.title = " " }
     it { should_not be_valid }
   end
   
@@ -42,4 +52,8 @@ describe Task do
     it { should_not be_valid }
   end
   
+  describe "When remaining effort is blank" do
+    before { @task.remaining_effort = " " }
+    it { should_not be_valid }
+  end
 end
