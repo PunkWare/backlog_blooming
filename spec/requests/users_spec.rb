@@ -180,7 +180,7 @@ describe "Regarding all user pages :" do
       visit users_path
     end
 
-    it { should_not have_selector('title', text: 'All users') }
+    it { should_not have_title(full_title('All users')) }
       
     # as a admin-user  
     describe "as an admin user" do  
@@ -243,5 +243,44 @@ describe "Regarding all user pages :" do
       # No delete link for the current admin user (to avoid admin deleting itself)
       it { should_not have_link('delete', href: user_path(another_admin)) }
     end
+  end
+  
+  describe "When displaying user's tasks page" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:heading) {user.name}
+    let(:page_title) {'My Tasks'}
+
+    # as a non signed-in user
+    before do
+      visit user_tasks_path
+    end
+
+    it { should_not have_title(full_title('My Tasks')) }
+
+    describe "as a signed-in user," do
+      let!(:task1) { FactoryGirl.create(:task, user: user, code: "T1", title: "Task 1", remaining_effort: 16) }
+      let!(:task2) { FactoryGirl.create(:task, user: user, code: "T2", title: "Task 2", remaining_effort: 8) }
+      
+      before do
+        sign_in user
+        visit user_tasks_path
+      end
+      
+      it_should_behave_like "all user pages"
+      
+      describe "the tasks" do
+        it { should have_content(task1.code) }
+        it { should have_content(task1.title) }
+        it { should have_content(task1.remaining_effort) }
+        
+        it { should have_content(task2.code) }
+        it { should have_content(task2.title) }
+        it { should have_content(task2.remaining_effort) }
+        
+        it { should have_content(user.tasks.count) }
+      end
+    end
+    
+    
   end
 end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   # arranges the signed_in_user method to be called before the given actions (edit and update)
-  before_filter :signed_in_user,  only: [:show, :edit, :update] 
+  before_filter :signed_in_user,  only: [:show, :edit, :update, :tasks] 
   before_filter :new_user,        only: [:new, :create]
   before_filter :correct_user,    only: [:show, :edit, :update]
   before_filter :admin_user,      only: [:index, :destroy]
@@ -31,6 +31,11 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+  end
+  
+  def tasks
+    @user = current_user
+    @tasks = @user.tasks.paginate(page: params[:page])
   end
   
   def edit

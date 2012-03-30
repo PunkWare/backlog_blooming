@@ -1,0 +1,25 @@
+<% provide(:title, "My Tasks") %>
+<div class="row">
+	<aside class="span4">
+    	<section>
+      		<h1>
+        		<%= gravatar_for @user %>
+        		<%= @user.name %>
+      		</h1>
+    	</section>
+  	</aside>
+	<div class="span8">
+    	<% if @user.tasks.any? %>
+      		<h3>Tasks (<%= @user.tasks.count %>)</h3>
+			<p class="tasks">
+			  	<span class="header_code">Code</span>
+				<span class="header_title">Title</span>
+				<span class="header_remaining_effort">Remaining (hours)</span>
+			</p>
+      		<ol class="tasks">
+        		<%= render @tasks %>
+      		</ol>
+      		<%= will_paginate @tasks %>
+    	<% end %>
+  	</div>
+</div>
