@@ -76,19 +76,6 @@ class UsersController < ApplicationController
   end
   
   private
-      def signed_in_user
-        unless signed_in?
-          # used to store location of the URI requested by the user.
-          # permit the forwarding whien the user has signed in
-          store_location
-          
-          redirect_to signin_path, notice: "Please sign in." unless signed_in?
-          # the line above is equivalent to :
-          #flash[:notice] = "Please sign in."
-          #redirect_to signin_path unless signed_in?
-        end
-      end
-      
       def new_user
         flash[:error] = "You already have an account."
         redirect_to(root_path) if signed_in?

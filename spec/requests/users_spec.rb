@@ -248,7 +248,7 @@ describe "Regarding all user pages :" do
   describe "When displaying user's tasks page" do
     let(:user) { FactoryGirl.create(:user) }
     let(:heading) {user.name}
-    let(:page_title) {'My Tasks'}
+    let(:page_title) {'My tasks'}
 
     # as a non signed-in user
     before do

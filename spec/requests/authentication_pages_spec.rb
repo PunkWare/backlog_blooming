@@ -109,6 +109,20 @@ describe "Signin, and signout pages" do
         # it shouldn't allow to go to view profile page, and forward to sign in page instead
         specify { response.should redirect_to(root_path) }
       end
+      
+      describe "when trying to edit a task" do
+        let(:task) { FactoryGirl.create(:task, user: user, code: "T1", title: "Task 1", remaining_effort: 16) }
+
+        describe "visiting the edit task page" do
+          before { visit edit_task_path(task) }
+          it { should have_title('Sign in') }
+        end
+
+        describe "submitting to the update action" do
+          before { put task_path(task) }
+          specify { response.should redirect_to(signin_path) }
+        end
+      end
     end
     
     describe "for signed-in users" do
@@ -162,6 +176,14 @@ describe "Signin, and signout pages" do
         specify { response.should redirect_to(root_path) }
       end
       
+      describe "when trying to edit a task" do
+        let(:task) { FactoryGirl.create(:task, user: user, code: "T1", title: "Task 1", remaining_effort: 16) }
+
+        describe "visiting the edit task page" do
+          before { visit edit_task_path(task) }
+          it { should have_title('Edit task') }
+        end
+      end
     end
     
     # when a non-signed-in user try to view or edit profile, he's redirected
