@@ -56,4 +56,21 @@ describe Task do
     before { @task.remaining_effort = " " }
     it { should_not be_valid }
   end
+  
+  # based on regexp : ^[\d ]+$/i
+  # see task.rb for regexp explanations
+  describe "when remaining  effort format is invalid" do
+    invalid_formats =  %w[-1 +1 1.0 1,0 a 1e5 ]
+    invalid_formats.each do |invalid_format|
+      before { @task.remaining_effort = invalid_format}
+      it { should_not be_valid }
+    end
+  end
+  describe "when remaining effort format is valid" do
+    valid_formats = %w[ 1 1456 ]
+    valid_formats.each do |valid_format|
+      before { @task.remaining_effort = valid_format }
+      it { should be_valid }
+    end
+  end
 end

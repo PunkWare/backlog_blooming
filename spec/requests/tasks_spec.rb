@@ -50,7 +50,8 @@ describe "Regarding all task pages :" do
         
         it { should have_flash_message('Code can\'t be blank','error') }
         it { should have_flash_message('Title can\'t be blank','error') }
-        it { should have_flash_message('Remaining effort can\'t be blank','error') }   
+        it { should have_flash_message('Remaining effort can\'t be blank','error') } 
+        it { should have_flash_message('Remaining effort is invalid','error') }  
       end
       
     end

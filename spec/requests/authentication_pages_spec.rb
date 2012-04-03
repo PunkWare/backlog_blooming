@@ -110,6 +110,7 @@ describe "Signin, and signout pages" do
         specify { response.should redirect_to(root_path) }
       end
       
+      # it shouldn't allow to edit a task when there's no signed-in user.
       describe "when trying to edit a task" do
         let(:task) { FactoryGirl.create(:task, user: user, code: "T1", title: "Task 1", remaining_effort: 16) }
 
